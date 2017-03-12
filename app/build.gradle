@@ -35,5 +35,6 @@ dependencies {
     compile 'org.jsoup:jsoup:1.10.2'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    compile 'com.android.support:recyclerview-v7:25.2.0'
     testCompile 'junit:junit:4.12'
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/padding_endereco_lista"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:background="?android:selectableItemBackground">
+
+    <TextView
+        android:id="@+id/tvCepCidadeUF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="CEP / Cidade - UF" />
+
+
+    <TextView
+        android:id="@+id/tvLogradouro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:hint="Logradouro"/>
+
+
+
+</LinearLayout>

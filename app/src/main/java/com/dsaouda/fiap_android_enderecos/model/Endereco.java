@@ -5,6 +5,8 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 @Table(name = "endereco")
 public class Endereco extends Model {
 

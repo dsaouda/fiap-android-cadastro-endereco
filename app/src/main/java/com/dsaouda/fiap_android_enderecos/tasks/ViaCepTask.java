@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 
 import com.dsaouda.fiap_android_enderecos.EnderecoActivity;
 import com.dsaouda.fiap_android_enderecos.dto.EnderecoDto;
-import com.dsaouda.fiap_android_enderecos.model.Endereco;
 import com.dsaouda.fiap_android_enderecos.services.ViaCepService;
 
 public class ViaCepTask extends AsyncTask<String, Void, EnderecoDto> {
@@ -15,13 +14,14 @@ public class ViaCepTask extends AsyncTask<String, Void, EnderecoDto> {
 
     public ViaCepTask(EnderecoActivity enderecoActivity) {
         this.enderecoActivity = enderecoActivity;
-        pgLoading = new ProgressDialog(enderecoActivity);
+
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
 
+        pgLoading = new ProgressDialog(enderecoActivity);
         pgLoading.setMessage("Buscando endereço ...");
         pgLoading.show();
     }
@@ -38,5 +38,6 @@ public class ViaCepTask extends AsyncTask<String, Void, EnderecoDto> {
     protected void onPostExecute(EnderecoDto endereco) {
         enderecoActivity.preencherCampos(endereco);
         pgLoading.hide();
+        pgLoading.dismiss();
     }
 }

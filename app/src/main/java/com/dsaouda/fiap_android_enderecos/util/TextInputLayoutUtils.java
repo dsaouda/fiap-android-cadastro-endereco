@@ -10,4 +10,8 @@ final public class TextInputLayoutUtils {
         return til.getEditText().getText().toString();
     }
 
+    public static void valor(TextInputLayout til, String valor) {
+        til.getEditText().setText(valor);
+    }
+
 }

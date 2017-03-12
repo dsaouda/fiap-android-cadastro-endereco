@@ -2,7 +2,6 @@ package com.dsaouda.fiap_android_enderecos;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,9 +10,6 @@ import com.dsaouda.fiap_android_enderecos.dto.EnderecoDto;
 import com.dsaouda.fiap_android_enderecos.model.Endereco;
 import com.dsaouda.fiap_android_enderecos.tasks.ViaCepTask;
 import com.dsaouda.fiap_android_enderecos.validator.ErrorValidator;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.dsaouda.fiap_android_enderecos.util.TextInputLayoutUtils.valor;
 
@@ -26,6 +22,7 @@ public class EnderecoActivity extends AppCompatActivity {
     private TextInputLayout tilCidade;
     private TextInputLayout tilUF;
     private ErrorValidator errors = new ErrorValidator();
+    private Endereco endereco;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +37,8 @@ public class EnderecoActivity extends AppCompatActivity {
         tilBairro = (TextInputLayout) findViewById(R.id.tilBairro);
         tilCidade = (TextInputLayout) findViewById(R.id.tilCidade);
         tilUF = (TextInputLayout) findViewById(R.id.tilUF);
+
+        carregarEndereco();
     }
 
     private View.OnFocusChangeListener tilCepFocusAction() {
@@ -97,7 +96,6 @@ public class EnderecoActivity extends AppCompatActivity {
             return ;
         }
 
-        final Endereco endereco = new Endereco();
         endereco.setCep(valor(tilCep));
         endereco.setLogradouro(valor(tilLogradouro));
         endereco.setComplemento(valor(tilComplemento));
@@ -115,6 +113,26 @@ public class EnderecoActivity extends AppCompatActivity {
         tilBairro.getEditText().setText(endereco.getBairro());
         tilCidade.getEditText().setText(endereco.getCidade());
         tilUF.getEditText().setText(endereco.getUf());
+    }
+
+    public void carregarEndereco() {
+        final Bundle extras = getIntent().getExtras();
+        Long enderecoId = (extras != null) ? extras.getLong("endereco") : null;
+
+        if (enderecoId == null) {
+            endereco = new Endereco();
+        } else {
+            endereco = Endereco.load(Endereco.class, enderecoId);
+
+            valor(tilCep, endereco.getCep());
+            valor(tilLogradouro, endereco.getLogradouro());
+            tilLogradouro.getEditText().requestFocus();
+
+            valor(tilBairro, endereco.getBairro());
+            valor(tilComplemento, endereco.getComplemento());
+            valor(tilCidade, endereco.getCidade());
+            valor(tilUF, endereco.getUf());
+        }
     }
 
     private void voltarTelaAnterior() {

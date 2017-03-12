@@ -3,6 +3,8 @@ package com.dsaouda.fiap_android_enderecos;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
+import com.dsaouda.fiap_android_enderecos.view.adapter.EnderecoListaAdapter;
 import com.dsaouda.fiap_android_enderecos.model.Endereco;
 import com.dsaouda.fiap_android_enderecos.repository.EnderecoRepository;
 
@@ -27,19 +30,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         ActiveAndroid.initialize(this);
 
-        Log.i(getClass().getSimpleName(), "OK");
-
-        final List<Endereco> enderecos = new EnderecoRepository().buscarTodos();
-
-        for(Endereco end : enderecos) {
-            Log.i(getClass().getSimpleName(), end.toString());
-        }
-
-
-        setContentView(R.layout.activity_main);
+        recycleViewEnderecoLista();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -66,16 +61,33 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    private void recycleViewEnderecoLista() {
+        final List<Endereco> enderecos = new EnderecoRepository().buscarTodos();
+
+        RecyclerView rvEnderecoLista = (RecyclerView) findViewById(R.id.rvEnderecoLista);
+        final EnderecoListaAdapter adapter = new EnderecoListaAdapter(enderecos, this);
+
+        rvEnderecoLista.setLayoutManager(new LinearLayoutManager(this));
+        rvEnderecoLista.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+        rvEnderecoLista.invalidate();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_CANCELED) {
-            Toast.makeText(MainActivity.this, "Cancelado", Toast.LENGTH_LONG).show();
-        } else if (requestCode == 201) {
-            Toast.makeText(MainActivity.this, "Endereço salvo com sucesso", Toast.LENGTH_LONG).show();
-        }
+        switch (resultCode) {
+            case RESULT_CANCELED:
+                Toast.makeText(MainActivity.this, "Cancelado", Toast.LENGTH_LONG).show();
+                break;
 
+            case 201:
+                Toast.makeText(MainActivity.this, "Endereço salvo com sucesso", Toast.LENGTH_LONG).show();
+                recycleViewEnderecoLista();
+                break;
+        }
     }
 
     @Override
