@@ -14,4 +14,6 @@
     <string name="uf">UF</string>
     <string name="salvar">Salvar</string>
     <string name="cidade">Cidade</string>
+    <string name="sobre_via_cep">Sobre Via Cep</string>
+    <string name="fechar">Fechar</string>
 </resources>
