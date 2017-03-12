@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">fiap_android_enderecos</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="diego_saouda_28scj_rm_31364">Diego Saouda (28SCJ - RM 31364)</string>
+    <string name="title_activity_endereco">EnderecoActivity</string>
+    <string name="cep">CEP</string>
+    <string name="logradouro">Logradouro</string>
+    <string name="complemento">Complemento</string>
+    <string name="bairro">Bairro</string>
+    <string name="uf">UF</string>
+    <string name="salvar">Salvar</string>
+    <string name="cidade">Cidade</string>
+</resources>
