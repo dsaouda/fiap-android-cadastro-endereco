@@ -16,4 +16,7 @@
     <string name="cidade">Cidade</string>
     <string name="sobre_via_cep">Sobre Via Cep</string>
     <string name="fechar">Fechar</string>
+    <string name="titulo">Titulo</string>
+    <string name="n_mero">Número</string>
+    <string name="nenhum_endere_o_cadastrado">Nenhum endereço cadastrado</string>
 </resources>

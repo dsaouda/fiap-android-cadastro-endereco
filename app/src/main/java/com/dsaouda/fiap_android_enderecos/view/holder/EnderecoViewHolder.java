@@ -1,11 +1,10 @@
 package com.dsaouda.fiap_android_enderecos.view.holder;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -16,8 +15,11 @@ import com.dsaouda.fiap_android_enderecos.R;
 import com.dsaouda.fiap_android_enderecos.model.Endereco;
 import com.dsaouda.fiap_android_enderecos.view.adapter.EnderecoListaAdapter;
 
+import java.util.Locale;
+
 public class EnderecoViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
+    private final TextView tvTitulo;
     private final TextView tvCepCidadeUF;
     private final TextView tvLogradouro;
     private final EnderecoListaAdapter adapter;
@@ -28,23 +30,25 @@ public class EnderecoViewHolder extends RecyclerView.ViewHolder implements View.
         this.adapter = adapter;
 
         view.setOnLongClickListener(this);
+        tvTitulo = (TextView) view.findViewById(R.id.tvTitulo);
         tvCepCidadeUF = (TextView) view.findViewById(R.id.tvCepCidadeUF);
         tvLogradouro = (TextView) view.findViewById(R.id.tvLogradouro);
     }
 
+    public void removerEndereco() {
+        Endereco.delete(enderecoId);
+        adapter.remove(getAdapterPosition());
+    }
+
     public void preencher(Endereco endereco) {
         enderecoId = endereco.getId();
-        tvCepCidadeUF.setText("#" + endereco.getId() + " - " + endereco.getCep() + " / " + endereco.getCidade() + " - " + endereco.getUf());
+        tvTitulo.setText(endereco.getTitulo());
+        tvCepCidadeUF.setText(endereco.getCep() + " / " + endereco.getCidade() + " - " + endereco.getUf());
         tvLogradouro.setText(endereco.getLogradouro());
     }
 
-
     @Override
     public boolean onLongClick(final View v) {
-
-
-
-
         PopupMenu popup = new PopupMenu(v.getContext(), v);
         popup.getMenuInflater().inflate(R.menu.endereco_actions, popup.getMenu());
 
@@ -63,18 +67,15 @@ public class EnderecoViewHolder extends RecyclerView.ViewHolder implements View.
                         break;
 
                     case R.id.menuDeletar:
-                        Model.delete(Endereco.class, enderecoId);
-
-                        Log.i("POSICAO", "" + EnderecoViewHolder.this.getAdapterPosition());
-
-
-                        adapter.remove(EnderecoViewHolder.this.getAdapterPosition());
-
-
+                        removerEndereco();
 
                         break;
 
                     case R.id.menuVisualizarNoMapa:
+                        final Endereco endereco = Model.load(Endereco.class, enderecoId);
+                        String uri = String.format(Locale.ENGLISH, "geo:0,0?q=%s", endereco.toMaps());
+                        Intent intentMaps = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                        v.getContext().startActivity(intentMaps);
 
                         break;
                 }

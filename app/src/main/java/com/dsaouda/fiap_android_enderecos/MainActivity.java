@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,12 +18,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 import com.dsaouda.fiap_android_enderecos.view.adapter.EnderecoListaAdapter;
 import com.dsaouda.fiap_android_enderecos.model.Endereco;
 import com.dsaouda.fiap_android_enderecos.repository.EnderecoRepository;
+import com.dsaouda.fiap_android_enderecos.view.holder.EnderecoViewHolder;
 
 import java.util.List;
 
@@ -35,7 +39,6 @@ public class MainActivity extends AppCompatActivity
 
         ActiveAndroid.initialize(this);
 
-
         recycleViewEnderecoLista();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -46,10 +49,6 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 final Intent intent = new Intent(MainActivity.this, EnderecoActivity.class);
                 startActivityForResult(intent, 200);
-
-
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
             }
         });
 
@@ -79,6 +78,16 @@ public class MainActivity extends AppCompatActivity
         final List<Endereco> enderecos = new EnderecoRepository().buscarTodos();
 
         RecyclerView rvEnderecoLista = (RecyclerView) findViewById(R.id.rvEnderecoLista);
+        TextView tvSemEndereco = (TextView) findViewById(R.id.tvSemEndereco);
+
+        if (enderecos.size() == 0) {
+            tvSemEndereco.setVisibility(View.VISIBLE);
+            rvEnderecoLista.setVisibility(View.INVISIBLE);
+        } else {
+            tvSemEndereco.setVisibility(View.INVISIBLE);
+            rvEnderecoLista.setVisibility(View.VISIBLE);
+        }
+
         final EnderecoListaAdapter adapter = new EnderecoListaAdapter(enderecos, this);
 
         rvEnderecoLista.setLayoutManager(new LinearLayoutManager(this));
@@ -86,6 +95,24 @@ public class MainActivity extends AppCompatActivity
 
         adapter.notifyDataSetChanged();
         rvEnderecoLista.invalidate();
+
+        //swipe
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                Snackbar.make(viewHolder.itemView, "Deletado", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                ((EnderecoViewHolder)viewHolder).removerEndereco();
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(rvEnderecoLista);
+
     }
 
     @Override
@@ -123,12 +150,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_fechar) {
             System.exit(0);
             return true;
@@ -140,7 +163,6 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         switch (id) {

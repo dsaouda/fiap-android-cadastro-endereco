@@ -15,8 +15,10 @@ import static com.dsaouda.fiap_android_enderecos.util.TextInputLayoutUtils.valor
 
 public class EnderecoActivity extends AppCompatActivity {
 
+    private TextInputLayout tilTitulo;
     private TextInputLayout tilCep;
     private TextInputLayout tilLogradouro;
+    private TextInputLayout tilNumero;
     private TextInputLayout tilComplemento;
     private TextInputLayout tilBairro;
     private TextInputLayout tilCidade;
@@ -29,10 +31,12 @@ public class EnderecoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_endereco);
 
+        tilTitulo = (TextInputLayout) findViewById(R.id.tilTitulo);
         tilCep = (TextInputLayout) findViewById(R.id.tilCep);
         tilCep.getEditText().setOnFocusChangeListener(tilCepFocusAction());
 
         tilLogradouro = (TextInputLayout) findViewById(R.id.tilLogradouro);
+        tilNumero = (TextInputLayout) findViewById(R.id.tilNumero);
         tilComplemento = (TextInputLayout) findViewById(R.id.tilComplemento);
         tilBairro = (TextInputLayout) findViewById(R.id.tilBairro);
         tilCidade = (TextInputLayout) findViewById(R.id.tilCidade);
@@ -61,11 +65,16 @@ public class EnderecoActivity extends AppCompatActivity {
 
     private void validator() {
 
+        errors.remove(R.id.tilTitulo);
         errors.remove(R.id.tilCep);
         errors.remove(R.id.tilLogradouro);
         errors.remove(R.id.tilBairro);
         errors.remove(R.id.tilCidade);
         errors.remove(R.id.tilUF);
+
+        if (valor(tilTitulo).length() < 3) {
+            errors.put(R.id.tilTitulo, "Título precisa ter pelo menos 3 caracteres");
+        }
 
         if (valor(tilCep).length() != 8) {
             errors.put(R.id.tilCep, "CEP precisa ter 8 caracteres");
@@ -73,6 +82,10 @@ public class EnderecoActivity extends AppCompatActivity {
 
         if (valor(tilLogradouro).length() < 3) {
             errors.put(R.id.tilLogradouro, "Logradouro precisa ter 3 caracteres");
+        }
+
+        if (valor(tilNumero).length() < 1) {
+            errors.put(R.id.tilNumero, "Número precisa ser preenchido");
         }
 
         if (valor(tilBairro).length() < 3) {
@@ -96,8 +109,10 @@ public class EnderecoActivity extends AppCompatActivity {
             return ;
         }
 
+        endereco.setTitulo(valor(tilTitulo));
         endereco.setCep(valor(tilCep));
         endereco.setLogradouro(valor(tilLogradouro));
+        endereco.setNumero(Integer.parseInt(valor(tilNumero)));
         endereco.setComplemento(valor(tilComplemento));
         endereco.setBairro(valor(tilBairro));
         endereco.setUf(valor(tilUF));
@@ -124,6 +139,8 @@ public class EnderecoActivity extends AppCompatActivity {
         } else {
             endereco = Endereco.load(Endereco.class, enderecoId);
 
+            valor(tilTitulo, endereco.getTitulo());
+            valor(tilNumero, String.valueOf(endereco.getNumero()));
             valor(tilCep, endereco.getCep());
             valor(tilLogradouro, endereco.getLogradouro());
             tilLogradouro.getEditText().requestFocus();

@@ -11,6 +11,9 @@ import java.io.Serializable;
 public class Endereco extends Model {
 
     @Column
+    private String titulo;
+
+    @Column
     private String cep;
 
     @Column
@@ -25,6 +28,9 @@ public class Endereco extends Model {
     @SerializedName("localidade")
     @Column
     private String cidade;
+
+    @Column
+    private int numero;
 
     @Column
     private String uf;
@@ -81,6 +87,14 @@ public class Endereco extends Model {
         this.uf = uf;
     }
 
+    public String toMaps() {
+        return logradouro + ", " + numero + ", " + cep + ", " + cidade + " / " + uf;
+    }
+
+    public static void delete(Long id) {
+        Model.delete(Endereco.class, id);
+    }
+
     @Override
     public String toString() {
         return "Endereco{" +
@@ -92,5 +106,21 @@ public class Endereco extends Model {
                 ", cidade='" + cidade + '\'' +
                 ", uf='" + uf + '\'' +
                 '}';
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 }

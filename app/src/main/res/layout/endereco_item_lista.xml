@@ -10,9 +10,21 @@
     android:background="?android:selectableItemBackground">
 
     <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="25dp"
+        android:padding="8dp"
+        android:hint="Titulo" />
+
+    <TextView
         android:id="@+id/tvCepCidadeUF"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="16dp"
+        android:textAlignment="center"
         android:hint="CEP / Cidade - UF" />
 
 
@@ -20,9 +32,7 @@
         android:id="@+id/tvLogradouro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:padding="4dp"
+        android:textAlignment="center"
         android:hint="Logradouro"/>
-
-
-
 </LinearLayout>
