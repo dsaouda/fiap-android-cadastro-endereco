@@ -71,6 +71,7 @@ public class EnderecoActivity extends AppCompatActivity {
         errors.remove(R.id.tilBairro);
         errors.remove(R.id.tilCidade);
         errors.remove(R.id.tilUF);
+        errors.remove(R.id.tilNumero);
 
         if (valor(tilTitulo).length() < 3) {
             errors.put(R.id.tilTitulo, "Título precisa ter pelo menos 3 caracteres");
